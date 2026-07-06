@@ -1,0 +1,39 @@
+{
+  "id": "ooni-probe",
+  "name": "OONI Probe",
+  "version": "1.0.0",
+  "author": "OONI",
+  "license": "BSD-3-Clause",
+  "website": "https://ooni.org",
+  "category": "measurement",
+  "tagline": "Measure internet censorship from your network.",
+  "description": "Run scheduled OONI Probe tests from this router to detect blocking of websites and apps, and contribute open measurement data to the OONI network.",
+  "icon": "icon.svg",
+  "architectures": ["arm64", "amd64"],
+  "container": {
+    "image": "aaimio/ooni-probe:latest",
+    "interface": {
+      "name": "veth-ooni",
+      "address": "192.168.50.14/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {
+      "informed_consent": "true",
+      "upload_results": "{{settings.uploadResults}}"
+    },
+    "mounts": [
+      {
+        "name": "ooni-state",
+        "src": "ooni-probe/state",
+        "dst": "/root/.ooniprobe"
+      }
+    ],
+    "ports": []
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}

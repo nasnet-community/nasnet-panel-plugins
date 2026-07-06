@@ -1,0 +1,47 @@
+{
+  "id": "nasnet-monitor",
+  "name": "NASNET Monitor",
+  "version": "1.0.0",
+  "author": "NASNET Community",
+  "license": "MIT",
+  "website": "https://github.com/nasnet-community",
+  "category": "monitoring",
+  "tagline": "Router and network health monitoring.",
+  "description": "Collect router metrics, container status and connectivity checks on this router, with a local dashboard and optional alert webhooks.",
+  "icon": "icon.svg",
+  "architectures": ["arm", "arm64", "amd64"],
+  "container": {
+    "image": "ghcr.io/nasnet-community/nasnet-monitor:latest",
+    "interface": {
+      "name": "veth-monitor",
+      "address": "192.168.50.15/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {
+      "MONITOR_INTERVAL_SECONDS": "{{settings.intervalSeconds}}",
+      "MONITOR_RETENTION_DAYS": "{{settings.retentionDays}}",
+      "MONITOR_WEBHOOK_URL": "{{settings.webhookUrl}}"
+    },
+    "mounts": [
+      {
+        "name": "monitor-data",
+        "src": "nasnet-monitor/data",
+        "dst": "/data"
+      }
+    ],
+    "ports": [
+      {
+        "protocol": "tcp",
+        "containerPort": 8080,
+        "hostPort": "{{settings.webPort}}",
+        "description": "Dashboard (LAN only)"
+      }
+    ]
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}

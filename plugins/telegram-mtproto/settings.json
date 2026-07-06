@@ -1,0 +1,38 @@
+{
+  "settings": [
+    {
+      "key": "port",
+      "label": "Public port",
+      "type": "port",
+      "default": 8443,
+      "required": true,
+      "description": "WAN TCP port clients use to reach the proxy."
+    },
+    {
+      "key": "secret",
+      "label": "Proxy secret",
+      "type": "secret",
+      "generate": "hex32",
+      "required": true,
+      "description": "32-character hex secret. Share it with users together with your public IP and port."
+    },
+    {
+      "key": "adTag",
+      "label": "Sponsored channel tag",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "description": "Optional promo TAG obtained from @MTProxybot to advertise a channel."
+    },
+    {
+      "key": "workers",
+      "label": "Workers",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 4,
+      "required": false,
+      "description": "Number of proxy worker processes."
+    }
+  ]
+}

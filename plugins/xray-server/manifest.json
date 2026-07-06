@@ -1,0 +1,43 @@
+{
+  "id": "xray-server",
+  "name": "V2Ray / Xray",
+  "version": "1.0.0",
+  "author": "Project X",
+  "license": "MPL-2.0",
+  "website": "https://github.com/XTLS/Xray-core",
+  "category": "proxy",
+  "tagline": "Self-hosted V2Ray/Xray proxy server.",
+  "description": "Run an Xray (V2Ray-compatible) server on this router for VLESS or VMess proxying, with TCP or WebSocket transport.",
+  "icon": "icon.svg",
+  "architectures": ["arm", "arm64", "amd64"],
+  "container": {
+    "image": "teddysun/xray:latest",
+    "interface": {
+      "name": "veth-xray",
+      "address": "192.168.50.12/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {},
+    "mounts": [
+      {
+        "name": "xray-config",
+        "src": "xray-server/etc",
+        "dst": "/etc/xray"
+      }
+    ],
+    "ports": [
+      {
+        "protocol": "tcp",
+        "containerPort": 443,
+        "hostPort": "{{settings.port}}",
+        "description": "Proxy inbound"
+      }
+    ]
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}

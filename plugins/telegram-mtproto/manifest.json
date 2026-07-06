@@ -1,0 +1,41 @@
+{
+  "id": "telegram-mtproto",
+  "name": "Telegram MTProto",
+  "version": "1.0.0",
+  "author": "Telegram",
+  "license": "GPL-2.0-only",
+  "website": "https://github.com/TelegramMessenger/MTProxy",
+  "category": "proxy",
+  "tagline": "Self-hosted MTProto proxy for Telegram.",
+  "description": "Spin up an MTProto proxy on this router so devices on your network can reach Telegram through it.",
+  "icon": "icon.svg",
+  "architectures": ["arm64", "amd64"],
+  "container": {
+    "image": "telegrammessenger/proxy:latest",
+    "interface": {
+      "name": "veth-mtproto",
+      "address": "192.168.50.11/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {
+      "SECRET": "{{settings.secret}}",
+      "TAG": "{{settings.adTag}}",
+      "WORKERS": "{{settings.workers}}"
+    },
+    "mounts": [],
+    "ports": [
+      {
+        "protocol": "tcp",
+        "containerPort": 443,
+        "hostPort": "{{settings.port}}",
+        "description": "MTProto proxy port"
+      }
+    ]
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}
