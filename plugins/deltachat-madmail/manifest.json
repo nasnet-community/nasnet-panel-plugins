@@ -1,0 +1,46 @@
+{
+  "id": "deltachat-madmail",
+  "name": "DeltaChat",
+  "version": "1.0.0",
+  "author": "DeltaChat Team",
+  "license": "MIT",
+  "website": "https://github.com/themadorg/madmail",
+  "category": "messaging",
+  "tagline": "Decentralized email-based chat relay.",
+  "description": "Bring up a DeltaChat relay endpoint for offline-friendly, end-to-end encrypted messaging over standard email.",
+  "icon": "icon.svg",
+  "architectures": ["arm64", "amd64"],
+  "container": {
+    "image": "ghcr.io/nasnet-community/madmail:latest",
+    "interface": {
+      "name": "veth-madmail",
+      "address": "192.168.50.13/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {
+      "MADMAIL_DOMAIN": "{{settings.domain}}",
+      "MADMAIL_ACME": "{{settings.letsencrypt}}",
+      "MADMAIL_POSTMASTER": "{{settings.postmaster}}"
+    },
+    "mounts": [
+      {
+        "name": "madmail-data",
+        "src": "deltachat-madmail/data",
+        "dst": "/var/lib/madmail"
+      }
+    ],
+    "ports": [
+      { "protocol": "tcp", "containerPort": 25, "hostPort": 25, "description": "SMTP (server-to-server)" },
+      { "protocol": "tcp", "containerPort": 465, "hostPort": 465, "description": "SMTPS submission" },
+      { "protocol": "tcp", "containerPort": 587, "hostPort": 587, "description": "Submission (STARTTLS)" },
+      { "protocol": "tcp", "containerPort": 993, "hostPort": 993, "description": "IMAPS" },
+      { "protocol": "tcp", "containerPort": 80, "hostPort": 80, "description": "ACME HTTP-01 (only while issuing certificates)" }
+    ]
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}

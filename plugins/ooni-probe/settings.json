@@ -1,0 +1,22 @@
+{
+  "settings": [
+    {
+      "key": "uploadResults",
+      "label": "Upload results",
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Publish measurement results to the open OONI dataset."
+    },
+    {
+      "key": "intervalHours",
+      "label": "Test interval (hours)",
+      "type": "integer",
+      "default": 24,
+      "min": 1,
+      "max": 168,
+      "required": true,
+      "description": "How often the router re-runs the OONI test suite."
+    }
+  ]
+}

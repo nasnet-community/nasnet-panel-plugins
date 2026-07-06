@@ -1,0 +1,46 @@
+{
+  "settings": [
+    {
+      "key": "protocol",
+      "label": "Protocol",
+      "type": "select",
+      "options": ["vless", "vmess"],
+      "default": "vless",
+      "required": true,
+      "description": "Inbound proxy protocol."
+    },
+    {
+      "key": "port",
+      "label": "Public port",
+      "type": "port",
+      "default": 2083,
+      "required": true,
+      "description": "WAN TCP port published for clients."
+    },
+    {
+      "key": "uuid",
+      "label": "Client UUID",
+      "type": "secret",
+      "generate": "uuid",
+      "required": true,
+      "description": "UUID used by clients to authenticate."
+    },
+    {
+      "key": "network",
+      "label": "Transport",
+      "type": "select",
+      "options": ["tcp", "ws"],
+      "default": "tcp",
+      "required": true,
+      "description": "Stream transport: raw TCP or WebSocket."
+    },
+    {
+      "key": "wsPath",
+      "label": "WebSocket path",
+      "type": "string",
+      "default": "/xray",
+      "required": false,
+      "description": "Path for WebSocket transport (only used when transport is ws)."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "settings": [
+    {
+      "key": "webPort",
+      "label": "Dashboard port",
+      "type": "port",
+      "default": 8088,
+      "required": true,
+      "description": "LAN port for the dashboard, served at http://<router-ip>:<port>."
+    },
+    {
+      "key": "intervalSeconds",
+      "label": "Collection interval (seconds)",
+      "type": "integer",
+      "default": 60,
+      "min": 10,
+      "max": 3600,
+      "required": true,
+      "description": "How often metrics and connectivity checks are collected."
+    },
+    {
+      "key": "retentionDays",
+      "label": "Retention (days)",
+      "type": "integer",
+      "default": 7,
+      "min": 1,
+      "max": 90,
+      "required": true,
+      "description": "How long collected metrics are kept."
+    },
+    {
+      "key": "webhookUrl",
+      "label": "Alert webhook URL",
+      "type": "url",
+      "default": "",
+      "required": false,
+      "description": "Optional webhook (e.g. Telegram bot bridge, Slack) that receives alerts."
+    }
+  ]
+}

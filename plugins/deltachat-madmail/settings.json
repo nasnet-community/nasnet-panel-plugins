@@ -1,0 +1,27 @@
+{
+  "settings": [
+    {
+      "key": "domain",
+      "label": "Mail domain",
+      "type": "string",
+      "required": true,
+      "description": "Domain for the chatmail relay (e.g. mail.example.org). DNS A and MX records must point to this router's public IP."
+    },
+    {
+      "key": "letsencrypt",
+      "label": "Let's Encrypt TLS",
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Automatically obtain and renew TLS certificates. Requires port 80 reachable from the internet during issuance."
+    },
+    {
+      "key": "postmaster",
+      "label": "Postmaster email",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "description": "Contact address published for abuse/postmaster purposes."
+    }
+  ]
+}
