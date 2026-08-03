@@ -2,13 +2,24 @@
   "registryVersion": 1,
   "plugins": [
     {
+      "id": "nasnet-monitor",
+      "version": "1.0.0",
+      "name": "NASNET Monitor",
+      "author": "NASNET Community",
+      "category": "monitoring",
+      "tagline": "Router and network health monitoring.",
+      "url": "https://github.com/nasnet-community",
+      "canInstall": true
+    },
+    {
       "id": "telegram-mtproto",
       "version": "1.0.0",
       "name": "Telegram MTProto",
       "author": "Telegram",
       "category": "proxy",
       "tagline": "Self-hosted MTProto proxy for Telegram.",
-      "url": "https://github.com/TelegramMessenger/MTProxy"
+      "url": "https://github.com/TelegramMessenger/MTProxy",
+      "canInstall": false
     },
     {
       "id": "xray-server",
@@ -17,7 +28,8 @@
       "author": "Project X",
       "category": "proxy",
       "tagline": "Self-hosted V2Ray/Xray proxy server.",
-      "url": "https://github.com/XTLS/Xray-core"
+      "url": "https://github.com/XTLS/Xray-core",
+      "canInstall": false
     },
     {
       "id": "deltachat-madmail",
@@ -26,7 +38,8 @@
       "author": "DeltaChat Team",
       "category": "messaging",
       "tagline": "Decentralized email-based chat relay.",
-      "url": "https://delta.chat"
+      "url": "https://delta.chat",
+      "canInstall": false
     },
     {
       "id": "ooni-probe",
@@ -35,16 +48,8 @@
       "author": "OONI",
       "category": "measurement",
       "tagline": "Measure internet censorship from your network.",
-      "url": "https://ooni.org"
-    },
-    {
-      "id": "nasnet-monitor",
-      "version": "1.0.0",
-      "name": "NASNET Monitor",
-      "author": "NASNET Community",
-      "category": "monitoring",
-      "tagline": "Router and network health monitoring.",
-      "url": "https://github.com/nasnet-community"
+      "url": "https://ooni.org",
+      "canInstall": false
     }
   ]
 }
