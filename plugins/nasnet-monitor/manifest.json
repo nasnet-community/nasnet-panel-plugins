@@ -34,7 +34,7 @@
         "protocol": "tcp",
         "containerPort": 8080,
         "hostPort": "{{settings.webPort}}",
-        "description": "Dashboard (LAN only)"
+        "description": "Web dashboard"
       }
     ]
   },

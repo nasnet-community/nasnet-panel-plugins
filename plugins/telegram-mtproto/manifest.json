@@ -28,7 +28,7 @@
         "protocol": "tcp",
         "containerPort": 443,
         "hostPort": "{{settings.port}}",
-        "description": "MTProto proxy port"
+        "description": "MTProto proxy"
       }
     ]
   },

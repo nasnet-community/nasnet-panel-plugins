@@ -73,7 +73,7 @@ New plugins take the next free address and register it here.
 - `interface` — `{ name, address, gateway }` for the plugin's veth
 - `env` — key/value map, values may use `{{settings.*}}` placeholders
 - `mounts` — `[{ name, src, dst }]`; `src` is relative to the router's NASNET data root (e.g. `usb1/nasnet/`)
-- `ports` — `[{ protocol, containerPort, hostPort, description }]`; `hostPort` may be a placeholder. Informational for the panel UI; actual exposure is done by `post-install.rsc`.
+- `ports` — `[{ protocol, containerPort, hostPort, description }]`; `hostPort` may be a placeholder. `description` is a short label for what the port serves (e.g. `Web dashboard`), used only for display in the panel dashboard; nothing on the router reads it. Ports are informational in general, and actual exposure is done by `post-install.rsc`.
 
 ## settings.json
 
