@@ -1,5 +1,5 @@
 #
-# model = C53UiG+5HPaxD2HPaxD
+# model = <redacted>
 /interface bridge
 add comment="Foreign Table Address Holder" name=FTAH
 add comment=Domestic name=LANBridgeDomestic

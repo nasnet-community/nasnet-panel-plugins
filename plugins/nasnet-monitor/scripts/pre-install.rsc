@@ -1,5 +1,5 @@
 #
-# model = C53UiG+5HPaxD2HPaxD
+# model = <redacted>
 /interface bridge
 add admin-mac=02:00:00:00:00:01 auto-mac=no comment=defconf name=bridge
 /interface wifi
