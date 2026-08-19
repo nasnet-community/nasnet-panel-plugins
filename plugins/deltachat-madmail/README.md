@@ -17,6 +17,7 @@ Chatmail relay for [Delta Chat](https://delta.chat), powered by [Madmail](https:
 - Container: `192.168.50.13` on the shared `containers` bridge.
 - `post-install.rsc` forwards TCP 25, 465, 587, 993 (mail) and 80 (ACME) from WAN to the container.
 - Mail data persists in `nasnet/deltachat-madmail/data` on the router disk.
+- No web dashboard. Delta Chat apps reach the relay over IMAP and SMTP, not from a browser, so none of the published ports serves a UI. Port 80 answers only while Let's Encrypt issues or renews a certificate.
 
 ## Requirements
 
