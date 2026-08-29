@@ -14,8 +14,6 @@ Plugin registry for the NASNET Panel. Each plugin's manifest and settings are ad
 | --- | --- | --- |
 | [Telegram MTProto](plugins/telegram-mtproto) | proxy | Self-hosted MTProto proxy for Telegram |
 | [V2Ray / Xray](plugins/xray-server) | proxy | Self-hosted V2Ray/Xray proxy server |
-| [DeltaChat (Madmail)](plugins/deltachat-madmail) | messaging | Decentralized email-based chat relay |
-| [OONI Probe](plugins/ooni-probe) | measurement | Measure internet censorship from your network |
 | [NASNET Monitor](plugins/nasnet-monitor) | monitoring | Router and network health monitoring |
 
 ## Contributing
