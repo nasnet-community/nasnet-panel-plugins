@@ -30,26 +30,6 @@
       "tagline": "Self-hosted V2Ray/Xray proxy server.",
       "url": "https://github.com/XTLS/Xray-core",
       "canInstall": false
-    },
-    {
-      "id": "deltachat-madmail",
-      "version": "1.0.0",
-      "name": "DeltaChat",
-      "author": "DeltaChat Team",
-      "category": "messaging",
-      "tagline": "Decentralized email-based chat relay.",
-      "url": "https://delta.chat",
-      "canInstall": false
-    },
-    {
-      "id": "ooni-probe",
-      "version": "1.0.0",
-      "name": "OONI Probe",
-      "author": "OONI",
-      "category": "measurement",
-      "tagline": "Measure internet censorship from your network.",
-      "url": "https://ooni.org",
-      "canInstall": false
     }
   ]
 }

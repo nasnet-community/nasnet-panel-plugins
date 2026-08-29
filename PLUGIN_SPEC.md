@@ -42,8 +42,6 @@ Scripts, env values and templates may contain `{{settings.<key>}}` placeholders.
 | ----------------- | ------------- | ----------- |
 | telegram-mtproto  | veth-mtproto  | 192.168.50.11 |
 | xray-server       | veth-xray     | 192.168.50.12 |
-| deltachat-madmail | veth-madmail  | 192.168.50.13 |
-| ooni-probe        | veth-ooni     | 192.168.50.14 |
 | nasnet-monitor    | veth-monitor  | 192.168.50.15 |
 
 New plugins take the next free address and register it here.
