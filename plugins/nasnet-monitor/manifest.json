@@ -18,6 +18,7 @@
       "gateway": "192.168.50.1"
     },
     "env": {
+      "BASE_PATH": "/api/plugin/view/nasnet-monitor",
       "MONITOR_INTERVAL_SECONDS": "{{settings.intervalSeconds}}",
       "MONITOR_RETENTION_DAYS": "{{settings.retentionDays}}",
       "MONITOR_WEBHOOK_URL": "{{settings.webhookUrl}}"
