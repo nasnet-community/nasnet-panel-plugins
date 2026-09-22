@@ -17,5 +17,5 @@ Image: `ghcr.io/nasnet-community/nasnet-monitor` (built by the NASNET community;
 
 - Container: `192.168.50.15` on the shared `containers` bridge, internal port 8080.
 - `pre-install.rsc` adds the container address to the `Safe` address list; there is no port forward to the dashboard.
-- `post-install.rsc` adds a scheduler that restarts the container daily at 00:00.
+- `post-install.rsc` adds a scheduler that restarts the container daily at 00:00 with `/container restart` (RouterOS 7.23+).
 - Metrics persist in `nasnet/nasnet-monitor/data`.
