@@ -1,14 +1,10 @@
-:log info "nasnet-panel: removing Safe 8015 DNAT configuration"
+:log info "nasnet-monitor: removing Safe Route configuration"
 
 :do {
-    /ip/firewall/nat remove [find where comment="nasnet:nasnet-monitor:dashboard-dnat"]
+    /ip/firewall/address-list remove [find where list="Safe" && address="192.168.50.15" && comment="Safe"]
 } on-error={}
 
-:do {
-    /ip/firewall/address-list remove [find where comment="nasnet:nasnet-monitor:safe-address"]
-} on-error={}
-
-:log info "nasnet-panel: Safe 8015 DNAT configuration removed"
+:log info "nasnet-monitor: Safe Route configuration removed"
 
 :do {
     /system/scheduler remove [find where comment="nasnet:nasnet-monitor:daily-restart"]

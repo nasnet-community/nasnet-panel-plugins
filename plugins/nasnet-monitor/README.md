@@ -16,5 +16,6 @@ Image: `ghcr.io/nasnet-community/nasnet-monitor` (built by the NASNET community;
 ## Networking
 
 - Container: `192.168.50.15` on the shared `containers` bridge, internal port 8080.
-- Dashboard is reachable at `http://<router-lan-ip>:8015` from non-WAN interfaces only; `post-install.rsc` adds a DNAT rule to the container limited to sources in the `Safe` address list.
+- `pre-install.rsc` adds the container address to the `Safe` address list; there is no port forward to the dashboard.
+- `post-install.rsc` adds a scheduler that restarts the container daily at 00:00.
 - Metrics persist in `nasnet/nasnet-monitor/data`.
