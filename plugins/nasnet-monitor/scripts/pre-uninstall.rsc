@@ -7,5 +7,5 @@
 :log info "nasnet-monitor: Safe Route configuration removed"
 
 :do {
-    /system/scheduler remove [find where comment="nasnet:nasnet-monitor:daily-restart"]
+    /system/scheduler remove [find where comment="nasnet-monitor:daily-restart"]
 } on-error={}
