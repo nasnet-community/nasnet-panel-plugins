@@ -17,7 +17,7 @@ plugins/<plugin-id>/
   templates/           optional — config file templates rendered to the router disk
 ```
 
-`plugins.json` at the repo root indexes all plugins for the panel's store view.
+`plugins.json` at the repo root indexes all plugins for the panel's store view. Each entry repeats the plugin's `visible` flag from its manifest, and the two must match.
 
 ## Install lifecycle
 
@@ -53,6 +53,7 @@ New plugins take the next free address and register it here.
 | `id`            | Folder name, kebab-case, unique in the registry                |
 | `name`          | Display name on the store card                                 |
 | `version`       | Plugin version (semver)                                        |
+| `visible`       | `true` if the plugin is ready for users, `false` if not. The panel lists only plugins with `visible: true`; a missing flag counts as `false`. Copy the same value into the plugin's `plugins.json` entry |
 | `author`        | Shown as "by <author>" on the card                             |
 | `license`       | SPDX id of the upstream software                               |
 | `website`       | Upstream project URL                                           |

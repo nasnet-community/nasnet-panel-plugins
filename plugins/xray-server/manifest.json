@@ -2,6 +2,7 @@
   "id": "xray-server",
   "name": "V2Ray / Xray",
   "version": "1.0.0",
+  "visible": true,
   "author": "Project X",
   "license": "MPL-2.0",
   "website": "https://github.com/XTLS/Xray-core",
