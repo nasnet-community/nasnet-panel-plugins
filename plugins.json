@@ -4,6 +4,7 @@
     {
       "id": "nasnet-monitor",
       "version": "1.0.0",
+      "released": true,
       "name": "NASNET Monitor",
       "author": "NASNET Community",
       "category": "monitoring",
@@ -14,6 +15,7 @@
     {
       "id": "telegram-mtproto",
       "version": "1.0.0",
+      "released": false,
       "name": "Telegram MTProto",
       "author": "Telegram",
       "category": "proxy",
@@ -24,6 +26,7 @@
     {
       "id": "xray-server",
       "version": "1.0.0",
+      "released": false,
       "name": "V2Ray / Xray",
       "author": "Project X",
       "category": "proxy",
