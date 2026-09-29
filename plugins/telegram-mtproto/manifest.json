@@ -2,7 +2,7 @@
   "id": "telegram-mtproto",
   "name": "Telegram MTProto",
   "version": "1.0.0",
-  "visible": false,
+  "visible": true,
   "author": "Telegram",
   "license": "GPL-2.0-only",
   "website": "https://github.com/TelegramMessenger/MTProxy",

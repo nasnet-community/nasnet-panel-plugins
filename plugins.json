@@ -15,7 +15,7 @@
     {
       "id": "telegram-mtproto",
       "version": "1.0.0",
-      "visible": false,
+      "visible": true,
       "name": "Telegram MTProto",
       "author": "Telegram",
       "category": "proxy",
@@ -26,7 +26,7 @@
     {
       "id": "xray-server",
       "version": "1.0.0",
-      "visible": false,
+      "visible": true,
       "name": "V2Ray / Xray",
       "author": "Project X",
       "category": "proxy",
