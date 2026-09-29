@@ -2,7 +2,7 @@
   "id": "nasnet-monitor",
   "name": "NASNET Monitor",
   "version": "1.0.0",
-  "released": true,
+  "visible": true,
   "author": "NASNET Community",
   "license": "MIT",
   "website": "https://github.com/nasnet-community",
