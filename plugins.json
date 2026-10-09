@@ -14,13 +14,13 @@
     },
     {
       "id": "telegram-mtproto",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "visible": true,
       "name": "Telegram MTProto",
-      "author": "Telegram",
+      "author": "NASNET Community",
       "category": "proxy",
-      "tagline": "Self-hosted MTProto proxy for Telegram.",
-      "url": "https://github.com/TelegramMessenger/MTProxy",
+      "tagline": "Run MTProto proxy servers on your VPSes.",
+      "url": "https://github.com/nasnet-community/mtproto-remote-plugin",
       "canInstall": false
     },
     {

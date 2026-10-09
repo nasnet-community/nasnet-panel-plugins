@@ -1,35 +1,39 @@
 {
   "id": "telegram-mtproto",
   "name": "Telegram MTProto",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "visible": true,
-  "author": "Telegram",
-  "license": "GPL-2.0-only",
-  "website": "https://github.com/TelegramMessenger/MTProxy",
+  "author": "NASNET Community",
+  "license": "MIT",
+  "website": "https://github.com/nasnet-community/mtproto-remote-plugin",
   "category": "proxy",
-  "tagline": "Self-hosted MTProto proxy for Telegram.",
-  "description": "Spin up an MTProto proxy on this router so devices on your network can reach Telegram through it.",
+  "tagline": "Run MTProto proxy servers on your VPSes.",
+  "description": "Install and manage Telegram MTProto proxy servers on remote Linux VPSes. Their upstream connections are carried through this router, which dials Telegram on their behalf.",
   "icon": "icon.svg",
-  "architectures": ["arm64", "amd64"],
+  "architectures": ["arm", "arm64", "amd64"],
   "container": {
-    "image": "telegrammessenger/proxy:latest",
+    "image": "ghcr.io/nasnet-community/mtproto-remote-plugin:main",
     "interface": {
       "name": "veth-mtproto",
       "address": "192.168.50.11/24",
       "gateway": "192.168.50.1"
     },
     "env": {
-      "SECRET": "{{settings.secret}}",
-      "TAG": "{{settings.adTag}}",
-      "WORKERS": "{{settings.workers}}"
+      "BASE_PATH": "/api/plugin/view/telegram-mtproto"
     },
-    "mounts": [],
+    "mounts": [
+      {
+        "name": "mtproto-data",
+        "src": "telegram-mtproto/data",
+        "dst": "/data"
+      }
+    ],
     "ports": [
       {
         "protocol": "tcp",
-        "containerPort": 443,
-        "hostPort": "{{settings.port}}",
-        "description": "MTProto proxy"
+        "containerPort": 8080,
+        "hostPort": "{{settings.webPort}}",
+        "description": "Web dashboard"
       }
     ]
   },
