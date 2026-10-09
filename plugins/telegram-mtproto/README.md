@@ -23,7 +23,7 @@ Users, their secrets, limits and usage live in the plugin's data folder on the r
 - Container: `192.168.50.11` on the shared `containers` bridge, dashboard on internal port 8080.
 - The container only dials out. Nothing is published on the WAN.
 - It relies on two routing rules for `192.168.50.11`, which the panel's setup wizard adds: destinations in `DOMAddList` (the VPSes) go through the domestic route, everything else that is not a local address (Telegram, binary downloads) goes through the foreign route. `pre-install.rsc` adds them if a wizard re-run or an older setup lost them (commented `nasnet:telegram-mtproto:*`); `pre-uninstall.rsc` removes only those.
-- Data persists in `telegram-mtproto/data` on the router's disk.
+- Data persists in `nasnet-panel/container-volumes/telegram-mtproto/telegram-mtproto/data` on the panel's storage.
 
 ## Troubleshooting
 
