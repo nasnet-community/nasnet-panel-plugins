@@ -1,4 +1,4 @@
-# Telegram MTProto
+# Remote MTProto
 
 Installs and manages MTProto proxy servers ([telemt](https://github.com/telemt/telemt)) on remote Linux VPSes. Each VPS runs a small agent (`mtproto-agent`) next to telemt; it carries the proxy server's upstream connections through this router, which dials Telegram on its behalf. The router always opens the connection to the VPS: nothing on the router is reachable from the internet.
 

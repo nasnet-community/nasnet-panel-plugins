@@ -16,7 +16,7 @@
       "id": "telegram-mtproto",
       "version": "1.1.0",
       "visible": true,
-      "name": "Telegram MTProto",
+      "name": "Remote MTProto",
       "author": "NASNET Community",
       "category": "proxy",
       "tagline": "Run MTProto proxy servers on your VPSes.",
