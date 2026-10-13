@@ -7,7 +7,7 @@ Image: `ghcr.io/nasnet-community/mtproto-local-plugin`, source [nasnet-community
 ## Needs
 
 - A router set up by the panel's wizard with a **domestic link** (the `Domestic-WAN` list and the `to-Domestic` and `to-Foreign` routing tables). On a router without one the dashboard says so and the proxy stays off.
-- A way in from outside: most homes need a TCP port forward on the ISP modem, to the router's domestic address. A line behind CGNAT can't take incoming connections at all. The dashboard's Status tab shows the exact step.
+- A way in from outside: most homes need a TCP port forward on the ISP modem, to the router's domestic address. A line behind CGNAT can't take incoming connections at all.
 - IP Cloud on (`/ip cloud set ddns-enabled=yes`) for the address in links, or an address typed in the dashboard's Settings.
 
 ## Settings
@@ -20,7 +20,7 @@ Open the dashboard from the panel, which proxies it.
 
 ## First run
 
-The dashboard asks for a cover site, which the router checks over the domestic link, and the first user's name, then shows that user's link and the modem step. Users, their secrets, limits and usage live in the plugin's data folder.
+The dashboard asks for a cover site, which the router checks over the domestic link, and the first user's name, then shows that user's link. Users, their secrets, limits and usage live in the plugin's data folder.
 
 ## Networking
 
@@ -35,6 +35,6 @@ The dashboard asks for a cover site, which the router checks over the domestic l
 
 ## Troubleshooting
 
-- **Links work at home but not outside.** Check the modem's port forward (Status tab), and that the line has a public IP address.
+- **Links work at home but not outside.** Check the modem's port forward to the router's port (Status, under Router), and that the line has a public IP address.
 - **The dashboard waits for the router.** The script reports within a minute of the install. If it never does, reinstall the plugin.
 - **The cover site check fails.** The site must answer TLS 1.3 as seen from the router over the domestic link. Pick another.
