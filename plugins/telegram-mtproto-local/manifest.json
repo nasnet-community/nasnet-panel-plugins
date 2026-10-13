@@ -1,0 +1,52 @@
+{
+  "id": "telegram-mtproto-local",
+  "name": "Local MTProto",
+  "version": "1.0.0",
+  "visible": true,
+  "author": "NASNET Community",
+  "license": "MIT",
+  "website": "https://github.com/nasnet-community/mtproto-remote-plugin",
+  "category": "proxy",
+  "tagline": "Run a Telegram proxy on this router.",
+  "description": "Runs a Telegram MTProto proxy (telemt) on the router itself. Family and friends connect through the router's domestic link, and the proxy reaches Telegram through the foreign one. No VPS needed. Needs a router with a domestic link.",
+  "icon": "icon.svg",
+  "architectures": ["arm", "arm64", "amd64"],
+  "container": {
+    "image": "ghcr.io/nasnet-community/mtproto-local-plugin:main",
+    "interface": {
+      "name": "veth-mtproto-local",
+      "address": "192.168.50.13/24,192.168.50.14/24",
+      "gateway": "192.168.50.1"
+    },
+    "env": {
+      "BASE_PATH": "/api/plugin/view/telegram-mtproto-local"
+    },
+    "mounts": [
+      {
+        "name": "mtproto-local-data",
+        "src": "telegram-mtproto-local/data",
+        "dst": "/data"
+      }
+    ],
+    "ports": [
+      {
+        "protocol": "tcp",
+        "containerPort": 8080,
+        "hostPort": "{{settings.webPort}}",
+        "description": "Web dashboard"
+      },
+      {
+        "protocol": "tcp",
+        "containerPort": 8443,
+        "hostPort": "random",
+        "description": "Telegram proxy, forwarded from a random port on the domestic link"
+      }
+    ]
+  },
+  "scripts": {
+    "preInstall": "scripts/pre-install.rsc",
+    "postInstall": "scripts/post-install.rsc",
+    "preUninstall": "scripts/pre-uninstall.rsc"
+  },
+  "settingsSchema": "settings.json"
+}

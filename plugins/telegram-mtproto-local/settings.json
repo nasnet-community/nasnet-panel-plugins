@@ -1,0 +1,12 @@
+{
+  "settings": [
+    {
+      "key": "webPort",
+      "label": "Dashboard port",
+      "type": "port",
+      "default": 8091,
+      "required": true,
+      "description": "Listed with the plugin's ports only; open the dashboard from the panel."
+    }
+  ]
+}
