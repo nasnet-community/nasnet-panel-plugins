@@ -33,6 +33,17 @@
       "tagline": "Self-hosted V2Ray/Xray proxy server.",
       "url": "https://github.com/XTLS/Xray-core",
       "canInstall": false
+    },
+    {
+      "id": "remote-nodes",
+      "version": "0.1.0",
+      "visible": false,
+      "name": "Remote Nodes",
+      "author": "NASNET Community",
+      "category": "proxy",
+      "tagline": "Manage your domestic nodes from this router.",
+      "url": "https://github.com/nasnet-community/nasnet-panel-linux",
+      "canInstall": false
     }
   ]
 }
