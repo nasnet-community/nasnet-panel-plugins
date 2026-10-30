@@ -64,16 +64,37 @@ New plugins take the next free address and register it here.
 | `icon`          | Path to the card icon, relative to the plugin folder           |
 | `architectures` | Container architectures the image supports                     |
 | `container`     | See below                                                      |
-| `scripts`       | Paths to `preInstall`, `postInstall`, `preUninstall` scripts   |
+| `scripts`       | Paths to `preInstall`, `postInstall`, `preUninstall` and, optionally, `postWizard` scripts |
 | `settingsSchema`| Path to `settings.json`                                        |
+| `minRouterOS`   | Optional. Oldest RouterOS the plugin works on, like `7.11`. An install on an older router is refused with a message |
+| `routing`       | Optional. Which of the router's links each of the veth's addresses leaves through. See below |
+| `keepDataOnUninstall` | Optional. `true` when the plugin's data folder holds something hard to recreate (a certificate authority, say). Uninstalling then leaves the folder in place unless the user also asks for its data to be deleted, and a reinstall picks it up again |
 
 `container`:
 
 - `image` — OCI image reference used as `remote-image`
-- `interface` — `{ name, address, gateway }` for the plugin's veth
+- `interface` — `{ name, address, gateway }` for the plugin's veth. `address` carries its prefix length (`192.168.50.11/24`). It can also be a list, `["192.168.50.16/24", "192.168.50.17/24"]`, for a plugin that needs several source addresses; the first is the container's own
 - `env` — key/value map, values may use `{{settings.*}}` placeholders
 - `mounts` — `[{ name, src, dst }]`; `src` is relative to the router's NASNET data root (e.g. `usb1/nasnet/`)
 - `ports` — `[{ protocol, containerPort, hostPort, description }]`; `hostPort` may be a placeholder. `description` is a short label for what the port serves (e.g. `Web dashboard`), used only for display in the panel dashboard; nothing on the router reads it. Ports are informational in general, and actual exposure is done by `post-install.rsc`.
+
+Optional container settings. They apply when the container is created (updating a plugin leaves them alone) and are taken literally: `{{settings.*}}` is not expanded in them. A bad value fails the install before anything on the router is touched, and leaving them out creates the container as before.
+
+- `memoryHigh`, `memoryMax` — memory limits as bytes or a number with a `K`, `M` or `G` suffix (`128M`). `memoryMax` is at least `1M` and not below `memoryHigh`
+- `cpuList` — cores to run on, named as RouterOS names them: `cpu0` or `cpu0,cpu1`
+- `user` — `user[:group]`, each a name or a numeric id: `1000:1000`
+- `devices` — devices to hand through, as RouterOS names them: `["serial0"]`
+- `autoRestartInterval` — a RouterOS time (`30s`, `5m`, `1h30m`): restart the container this long after it exits
+
+`routing`:
+
+`[{ address, via, domesticDirect }]`. `address` is one of the veth's addresses, without its prefix length. `via` is `foreign`, `domestic` or `vpn`: the router sends that source address out through its Foreign link, its Domestic link or its VPN. The router decides on the source address alone, so a container that picks its source address by purpose is routed by purpose. If the link a route names doesn't exist on the router (no Domestic link, no VPN), that address is dropped; it never falls back to another link. `domesticDirect` is only for `foreign`: what is bound for domestic destinations goes out the Domestic link instead, when the router has one.
+
+The panel applies the routes at install and again whenever the wizard runs, and uninstall removes them. The rules carry the comment `plugin:<plugin-id>`.
+
+`scripts.postWizard`:
+
+The wizard wipes every script and scheduler on the router. A `postWizard` script is run after a wizard run to put back what the plugin set up; point it at `pre-install.rsc` if that script only puts things back. The panel keeps a copy of it on the router from install on, so running it needs no network. Plugins without one are left as the wizard leaves them.
 
 ## settings.json
 
