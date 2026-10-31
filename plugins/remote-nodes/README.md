@@ -34,7 +34,7 @@ Open the dashboard from the panel, which proxies it.
 
 ## Router script
 
-`pre-install.rsc` adds the script `nasnet-remote-nodes-facts` and two schedulers for it, one at boot and one every 5 minutes (comment `nasnet:remote-nodes:*`), and runs it once. The script tells the plugin what only the router knows, in `router/state` in the data folder, as `key=value` lines:
+`pre-install.rsc` adds the script `nasnet-remote-nodes-facts` and two schedulers for it, one at boot and one every minute (comment `nasnet:remote-nodes:*`), and runs it once. The script tells the plugin what only the router knows, in `router/state` in the data folder, as `key=value` lines:
 
 | Key                                            | Meaning                                                              |
 | ---------------------------------------------- | -------------------------------------------------------------------- |
@@ -47,7 +47,7 @@ Open the dashboard from the panel, which proxies it.
 | `free_mem`, `free_disk`                        | free memory and free flash, in bytes                                 |
 | `updated`                                      | unix time of the write                                               |
 
-`domestic_addr` is how the plugin learns that the router's address on the domestic link changed (a PPPoE session that came back, a new DHCP lease, a wizard run): it restarts Xray on each node then, because a tunnel connection made from the old address is dead and a node holds on to it for many minutes. The address is the first one on the first running interface of the `Domestic-WAN` list, so a static address, a lease and a PPPoE session are all found the same way.
+`domestic_addr` is how the plugin learns that the router's address on the domestic link changed (a PPPoE session that came back, a new DHCP lease, a wizard run): it restarts Xray on each node then, because a tunnel connection made from the old address is dead and a node holds on to it for many minutes. The script runs every minute, so the plugin sees the change within about a minute. The address is the first one on the first running interface of the `Domestic-WAN` list, so a static address, a lease and a PPPoE session are all found the same way.
 
 The file is rewritten when a fact changes and at least every 10 minutes, to spare the flash. The wizard removes every script and scheduler when it runs again, so the panel runs `pre-install.rsc` once more afterwards (`scripts.postWizard`) to put them back. `post-install.rsc` runs the script again once the container is up, and makes sure both schedulers exist.
 
@@ -60,7 +60,7 @@ The file is rewritten when a fact changes and at least every 10 minutes, to spar
 ## Troubleshooting
 
 - **Entry is off.** The dashboard says whether the domestic link or the VPN is missing. `router/state` shows what the router reports, for example `route_vpn=0` while the VPN interface is down.
-- **The dashboard says the router's facts are old.** The script runs at boot and every 5 minutes. `/system script print` and `/system scheduler print` should list `nasnet-remote-nodes-facts` and its two schedulers; if not, reinstall the plugin.
+- **The dashboard says the router's facts are old.** The script runs at boot and every minute. `/system script print` and `/system scheduler print` should list `nasnet-remote-nodes-facts` and its two schedulers; if not, reinstall the plugin.
 
 ## Licence
 
