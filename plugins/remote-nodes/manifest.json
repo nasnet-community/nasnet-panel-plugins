@@ -11,7 +11,7 @@
   "description": "Installs and manages up to 3 Linux nodes from the router, with no separate panel. Up to 10 subscriptions get one link per node, and their traffic leaves through the router's VPN. Needs a domestic link and a VPN.",
   "icon": "icon.svg",
   "architectures": ["arm64", "amd64"],
-  "minRouterOS": "7.11",
+  "minRouterOS": "7.20",
   "container": {
     "image": "ghcr.io/nasnet-community/remote-nodes:0.1.0",
     "interface": {

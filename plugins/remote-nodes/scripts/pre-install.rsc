@@ -29,14 +29,14 @@
 # spells it out from compiling. So the file is rewritten in place, and a reader that
 # finds it empty, or without updated=, should look again.
 #
-# Nothing here needs more than 7.11, which has no :tonsec and cannot add a folder with
+# The script itself uses nothing newer than 7.11, which has no :tonsec and cannot add a folder with
 # /file add, so the router folder is made by putting the first file into it.
 #
 # Every local is named rnf...: in a find where, a variable named like a property
 # (list, name, address) reads as that property, which matches everything.
 :log info "remote-nodes: setting up the router's side"
 
-# below 7.11 a veth cannot hold the plugin's three addresses, so stop here
+# the plugin needs 7.20 (several addresses on a veth, mount lists, container memory limits), so stop here
 :local rnfVer [/system resource get version]
 :local rnfMajor 0
 :local rnfMinor 0
@@ -56,9 +56,9 @@
 }
 :if ([:typeof $rnfMajor] != "num") do={ :set rnfMajor 0 }
 :if ([:typeof $rnfMinor] != "num") do={ :set rnfMinor 0 }
-:if (($rnfMajor < 7) || (($rnfMajor = 7) && ($rnfMinor < 11))) do={
-    :log error ("remote-nodes: RouterOS " . $rnfVer . " is too old, 7.11 or newer is needed")
-    :error ("Remote Nodes needs RouterOS 7.11 or newer, this router runs " . $rnfVer)
+:if (($rnfMajor < 7) || (($rnfMajor = 7) && ($rnfMinor < 20))) do={
+    :log error ("remote-nodes: RouterOS " . $rnfVer . " is too old, 7.20 or newer is needed")
+    :error ("Remote Nodes needs RouterOS 7.20 or newer, this router runs " . $rnfVer)
 }
 
 # start clean: either nothing of ours is here yet, or the wizard wiped it

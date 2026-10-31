@@ -8,7 +8,7 @@ Image: `ghcr.io/nasnet-community/remote-nodes`, for `arm64` and `amd64` routers 
 
 ## Needs
 
-- RouterOS 7.11 or newer: the container's veth carries three addresses. On older versions the panel refuses the install, and `pre-install.rsc` stops with a message in the log.
+- RouterOS 7.20 or newer: the container's veth carries three addresses, its data folder needs a mount list, and its memory limits only exist from 7.20. On older versions the panel refuses the install, and `pre-install.rsc` stops with a message in the log.
 - A router set up by the panel's wizard with a **domestic link** (the `Domestic-WAN` list and the `to-Domestic` routing table) and a **VPN** (the `VPN-WAN` list and the `to-VPN` table).
 - The `container` package, enabled in device-mode.
 - For each node: a Linux server with systemd and SSH access, reachable over the domestic link, with TCP port 443 free.
