@@ -3,7 +3,7 @@
 # scheduler on the router. It only puts things back, so running it twice does no harm.
 #
 # It adds one script, nasnet-remote-nodes-facts, and two schedulers that run it: one at
-# boot and one every 5 minutes. The script leaves the plugin what only the router knows
+# boot and one every minute. The script leaves the plugin what only the router knows
 # in router/state under the plugin's data folder (container path /data/router/state),
 # as key=value lines. The plugin reads exactly these keys:
 #   domestic=1|0         a domestic link exists and is up: Domestic-WAN has an interface
@@ -206,7 +206,7 @@
     }
 }
 }
-/system scheduler add name="nasnet-remote-nodes-facts" interval=5m policy=ftp,read,write,test on-event="/system script run nasnet-remote-nodes-facts" comment="nasnet:remote-nodes:facts"
+/system scheduler add name="nasnet-remote-nodes-facts" interval=1m policy=ftp,read,write,test on-event="/system script run nasnet-remote-nodes-facts" comment="nasnet:remote-nodes:facts"
 /system scheduler add name="nasnet-remote-nodes-facts-boot" start-time=startup policy=ftp,read,write,test on-event=":delay 60s; /system script run nasnet-remote-nodes-facts" comment="nasnet:remote-nodes:facts-boot"
 :do { /system script run nasnet-remote-nodes-facts } on-error={ :log warning "remote-nodes: the facts script failed on its first run" }
 :log info "remote-nodes: the router's side is ready"
