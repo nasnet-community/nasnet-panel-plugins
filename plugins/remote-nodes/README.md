@@ -39,12 +39,15 @@ Open the dashboard from the panel, which proxies it.
 | Key                                            | Meaning                                                              |
 | ---------------------------------------------- | -------------------------------------------------------------------- |
 | `domestic`                                     | `1` when a domestic link exists and is up                            |
+| `domestic_addr`                                | the router's own IPv4 address on that link; empty when there is none |
 | `vpn`                                          | `1` when a VPN interface is up                                       |
 | `vpn_kind`, `vpn_label`                        | `wireguard`, `l2tp`, `openvpn` or `other`, and the interface's name  |
 | `route_foreign`, `route_vpn`, `route_domestic` | `1` when that routing table has a working default route              |
 | `ros`                                          | the RouterOS version                                                 |
 | `free_mem`, `free_disk`                        | free memory and free flash, in bytes                                 |
 | `updated`                                      | unix time of the write                                               |
+
+`domestic_addr` is how the plugin learns that the router's address on the domestic link changed (a PPPoE session that came back, a new DHCP lease, a wizard run): it restarts Xray on each node then, because a tunnel connection made from the old address is dead and a node holds on to it for many minutes. The address is the first one on the first running interface of the `Domestic-WAN` list, so a static address, a lease and a PPPoE session are all found the same way.
 
 The file is rewritten when a fact changes and at least every 10 minutes, to spare the flash. The wizard removes every script and scheduler when it runs again, so the panel runs `pre-install.rsc` once more afterwards (`scripts.postWizard`) to put them back. `post-install.rsc` runs the script again once the container is up, and makes sure both schedulers exist.
 
