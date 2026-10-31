@@ -8,6 +8,8 @@
 # as key=value lines. The plugin reads exactly these keys:
 #   domestic=1|0         a domestic link exists and is up: Domestic-WAN has an interface
 #                        that is on and running, and the table to-Domestic exists
+#   domestic_addr=       the router's own IPv4 address on that interface, like 192.168.1.20
+#                        (without the mask); empty when domestic=0 or it has no address yet
 #   vpn=1|0              VPN-WAN has an interface that is on and running
 #   vpn_kind=            wireguard, l2tp, openvpn or other; empty when VPN-WAN is empty
 #   vpn_label=           name of that interface, the first one that is up or else the
@@ -72,7 +74,13 @@
 
     # a domestic link: Domestic-WAN has an interface that is on and running, and its table exists
     # (these lists are short, only their first 16 entries are looked at)
+    #
+    # The router's address on it is the first address on the first such interface. A static address,
+    # a DHCP lease and a PPPoE session all show up in /ip address with the interface they are on, so
+    # one lookup covers them. The plugin restarts Xray on its nodes when this changes: a tunnel
+    # connection made from the old address is dead, and a node doesn't notice for many minutes.
     :local rnfDomestic 0
+    :local rnfDomAddr ""
     :if ([:len [/routing table find where name="to-Domestic"]] > 0) do={
         :local rnfSeenD 0
         :foreach rnfM in=[/interface list member find where list="Domestic-WAN"] do={
@@ -80,7 +88,17 @@
             :if ($rnfSeenD <= 16) do={
                 :local rnfIf [/interface list member get $rnfM interface]
                 :do {
-                    :if (([/interface get $rnfIf running] = true) && ([/interface get $rnfIf disabled] = false)) do={ :set rnfDomestic 1 }
+                    :if (([/interface get $rnfIf running] = true) && ([/interface get $rnfIf disabled] = false)) do={
+                        :set rnfDomestic 1
+                        :if ([:len $rnfDomAddr] = 0) do={
+                            :local rnfAddrIds [/ip address find where interface=$rnfIf && disabled=no && invalid=no]
+                            :if ([:len $rnfAddrIds] > 0) do={
+                                :local rnfCidr [:tostr [/ip address get ($rnfAddrIds->0) address]]
+                                :local rnfSlash [:find $rnfCidr "/"]
+                                :if ([:typeof $rnfSlash] = "num") do={ :set rnfDomAddr [:pick $rnfCidr 0 $rnfSlash] }
+                            }
+                        }
+                    }
                 } on-error={}
             }
         }
@@ -164,7 +182,7 @@
     :if ([:typeof $rnfNow] != "num") do={ :set rnfNow 0 }
 
     # the facts, then what changes all the time
-    :local rnfState ("domestic=" . $rnfDomestic . "\nvpn=" . $rnfVpn . "\nvpn_kind=" . $rnfVpnKind . "\nvpn_label=" . $rnfVpnLabel . "\n" . $rnfRoutes . "ros=" . $rnfRos . "\n")
+    :local rnfState ("domestic=" . $rnfDomestic . "\ndomestic_addr=" . $rnfDomAddr . "\nvpn=" . $rnfVpn . "\nvpn_kind=" . $rnfVpnKind . "\nvpn_label=" . $rnfVpnLabel . "\n" . $rnfRoutes . "ros=" . $rnfRos . "\n")
     :local rnfText ($rnfState . "free_mem=" . $rnfMem . "\nfree_disk=" . $rnfDisk . "\nupdated=" . $rnfNow . "\n")
 
     # leave the file alone when the facts are the same and it was written under 10 minutes ago
