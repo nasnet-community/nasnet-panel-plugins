@@ -6,6 +6,16 @@
     </linearGradient>
   </defs>
   <rect width="96" height="96" rx="20" fill="url(#g)"/>
-  <path d="M20 47.5 71 28c2.4-.9 4.6 1.2 4 3.7l-9.7 40.6c-.6 2.5-3.6 3.4-5.5 1.7L48.5 64l-6.8 6.6c-1.5 1.5-4 .8-4.6-1.2L33 55.5l-12.6-4c-2.5-.8-2.6-4.2-.4-5z" fill="#fff"/>
-  <path d="M33 55.5 62.7 37 40.5 60.8z" fill="#D2E4F0"/>
+  <g transform="translate(-1 -4) scale(.86)">
+    <path d="M20 47.5 71 28c2.4-.9 4.6 1.2 4 3.7l-9.7 40.6c-.6 2.5-3.6 3.4-5.5 1.7L48.5 64l-6.8 6.6c-1.5 1.5-4 .8-4.6-1.2L33 55.5l-12.6-4c-2.5-.8-2.6-4.2-.4-5z" fill="#fff"/>
+    <path d="M33 55.5 62.7 37 40.5 60.8z" fill="#D2E4F0"/>
+  </g>
+  <!-- remote: the proxies run on servers elsewhere -->
+  <circle cx="72" cy="72" r="17" fill="#fff"/>
+  <g fill="#1E96C8">
+    <circle cx="64.5" cy="75" r="4.5"/>
+    <circle cx="71" cy="70.5" r="6.5"/>
+    <circle cx="78.5" cy="74" r="5.5"/>
+    <rect x="64.5" y="74" width="14" height="5.5"/>
+  </g>
 </svg>
