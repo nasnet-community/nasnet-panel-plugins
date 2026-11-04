@@ -1,6 +1,6 @@
 # Local MTProto
 
-Runs a Telegram MTProto proxy ([telemt](https://github.com/telemt/telemt)) on the router itself, for family and friends. They connect from anywhere through the router's domestic link; the proxy reaches Telegram through the foreign link. No VPS is needed. For proxies on your own VPSes, use Remote MTProto.
+Runs a Telegram MTProto proxy ([telemt](https://github.com/telemt/telemt)) on the router itself, for family and friends. They connect from anywhere through the router's domestic link; the proxy reaches Telegram through the foreign link. No VPS is needed.
 
 Image: `ghcr.io/nasnet-community/mtproto-local-plugin`, source [nasnet-community/mtproto-remote-plugin](https://github.com/nasnet-community/mtproto-remote-plugin) (`cmd/mtproto-local`). It ships telemt's own release build for arm64 and x86-64. telemt publishes no build for 32-bit ARM, so that image carries an unofficial build made from telemt's unchanged source; the dashboard says so. telemt's licence is in the image at `/usr/local/share/telemt/LICENSE`.
 
