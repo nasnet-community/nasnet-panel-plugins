@@ -2,7 +2,7 @@
   "id": "telegram-mtproto",
   "name": "Remote MTProto",
   "version": "1.1.0",
-  "visible": true,
+  "visible": false,
   "author": "NASNET Community",
   "license": "MIT",
   "website": "https://github.com/nasnet-community/mtproto-remote-plugin",
