@@ -21,7 +21,7 @@
       "category": "proxy",
       "tagline": "Run a Telegram proxy on this router.",
       "url": "https://github.com/nasnet-community/mtproto-local",
-      "canInstall": false
+      "canInstall": true
     },
     {
       "id": "telegram-mtproto",
