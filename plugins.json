@@ -13,14 +13,25 @@
       "canInstall": true
     },
     {
-      "id": "telegram-mtproto",
+      "id": "telegram-mtproto-local",
       "version": "1.0.0",
       "visible": true,
-      "name": "Telegram MTProto",
-      "author": "Telegram",
+      "name": "Local MTProto",
+      "author": "NASNET Community",
       "category": "proxy",
-      "tagline": "Self-hosted MTProto proxy for Telegram.",
-      "url": "https://github.com/TelegramMessenger/MTProxy",
+      "tagline": "Run a Telegram proxy on this router.",
+      "url": "https://github.com/nasnet-community/mtproto-local",
+      "canInstall": true
+    },
+    {
+      "id": "telegram-mtproto",
+      "version": "1.1.0",
+      "visible": false,
+      "name": "Remote MTProto",
+      "author": "NASNET Community",
+      "category": "proxy",
+      "tagline": "Run MTProto proxy servers on your VPSes.",
+      "url": "https://github.com/nasnet-community/mtproto-remote-plugin",
       "canInstall": false
     },
     {
