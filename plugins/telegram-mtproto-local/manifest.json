@@ -5,14 +5,14 @@
   "visible": true,
   "author": "NASNET Community",
   "license": "MIT",
-  "website": "https://github.com/nasnet-community/mtproto-remote-plugin",
+  "website": "https://github.com/nasnet-community/mtproto-local",
   "category": "proxy",
   "tagline": "Run a Telegram proxy on this router.",
   "description": "Runs a Telegram MTProto proxy (telemt) on the router itself. Family and friends connect through the router's domestic link, and the proxy reaches Telegram through the foreign one. No VPS needed. Needs a router with a domestic link.",
   "icon": "icon.svg",
   "architectures": ["arm", "arm64", "amd64"],
   "container": {
-    "image": "ghcr.io/nasnet-community/mtproto-local-plugin:main",
+    "image": "ghcr.io/nasnet-community/mtproto-local:main",
     "interface": {
       "name": "veth-mtproto-local",
       "address": "192.168.50.13/24,192.168.50.14/24",
