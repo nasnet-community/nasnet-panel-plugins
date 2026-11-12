@@ -35,17 +35,6 @@
       "canInstall": false
     },
     {
-      "id": "xray-server",
-      "version": "1.0.0",
-      "visible": true,
-      "name": "V2Ray / Xray",
-      "author": "Project X",
-      "category": "proxy",
-      "tagline": "Self-hosted V2Ray/Xray proxy server.",
-      "url": "https://github.com/XTLS/Xray-core",
-      "canInstall": false
-    },
-    {
       "id": "remote-nodes",
       "version": "0.2.0",
       "visible": false,

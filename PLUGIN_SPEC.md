@@ -41,7 +41,6 @@ Scripts, env values and templates may contain `{{settings.<key>}}` placeholders.
 | Plugin            | veth          | Address     |
 | ----------------- | ------------- | ----------- |
 | telegram-mtproto  | veth-mtproto  | 192.168.50.11 |
-| xray-server       | veth-xray     | 192.168.50.12 |
 | telegram-mtproto-local | veth-mtproto-local | 192.168.50.13, 192.168.50.14 |
 | nasnet-monitor    | veth-monitor  | 192.168.50.15 |
 | remote-nodes      | veth-remote-nodes | 192.168.50.16, 192.168.50.17, 192.168.50.18 |
