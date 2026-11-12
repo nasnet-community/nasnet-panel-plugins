@@ -49,7 +49,7 @@
       "id": "remote-nodes",
       "version": "0.2.0",
       "visible": false,
-      "name": "Remote Nodes",
+      "name": "V2ray/Xray",
       "author": "NASNET Community",
       "category": "proxy",
       "tagline": "An Xray entry on this router and on your domestic nodes.",
