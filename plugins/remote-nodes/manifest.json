@@ -1,19 +1,19 @@
 {
   "id": "remote-nodes",
   "name": "Remote Nodes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "visible": false,
   "author": "NASNET Community",
   "license": "AGPL-3.0",
   "website": "https://github.com/nasnet-community/nasnet-panel-linux",
   "category": "proxy",
-  "tagline": "Manage your domestic nodes from this router.",
-  "description": "Installs and manages up to 3 Linux nodes from the router, with no separate panel. Up to 10 subscriptions get one link per node, and their traffic leaves through the router's VPN. Needs a domestic link and a VPN.",
+  "tagline": "An Xray entry on this router and on your domestic nodes.",
+  "description": "Runs an Xray entry on the router itself, and installs and manages up to 3 Linux nodes, with no separate panel. Up to 10 subscriptions get one link for the router and one per node, and their traffic leaves through the router's VPN. Needs a domestic link and a VPN.",
   "icon": "icon.svg",
   "architectures": ["arm64", "amd64"],
   "minRouterOS": "7.20",
   "container": {
-    "image": "ghcr.io/nasnet-community/remote-nodes:0.1.0",
+    "image": "ghcr.io/nasnet-community/remote-nodes:0.2.0",
     "interface": {
       "name": "veth-remote-nodes",
       "address": ["192.168.50.16/24", "192.168.50.17/24", "192.168.50.18/24"],
