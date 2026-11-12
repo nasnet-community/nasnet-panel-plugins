@@ -1,4 +1,4 @@
-# Remote Nodes
+# V2ray/Xray
 
 Runs an Xray entry on the router itself and manages Linux nodes from it, with no separate panel. One router has its own entry, "This router", and manages up to 3 nodes and 10 subscriptions. A subscription is a name with one `vless://` link (and QR code) per place it is switched on for, a traffic counter and an on/off switch.
 

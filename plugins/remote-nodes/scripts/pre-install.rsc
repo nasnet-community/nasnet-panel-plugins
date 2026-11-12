@@ -1,4 +1,4 @@
-# remote-nodes: the router's side of Remote Nodes.
+# remote-nodes: the router's side of the V2ray/Xray plugin.
 # This file runs at install and again after a wizard run, which wipes every script and
 # scheduler on the router. It only puts things back, so running it twice does no harm.
 #
@@ -81,7 +81,7 @@
 :if ([:typeof $rnfMinor] != "num") do={ :set rnfMinor 0 }
 :if (($rnfMajor < 7) || (($rnfMajor = 7) && ($rnfMinor < 20))) do={
     :log error ("remote-nodes: RouterOS " . $rnfVer . " is too old, 7.20 or newer is needed")
-    :error ("Remote Nodes needs RouterOS 7.20 or newer, this router runs " . $rnfVer)
+    :error ("V2ray/Xray needs RouterOS 7.20 or newer, this router runs " . $rnfVer)
 }
 
 # start clean: either nothing of ours is here yet, or the wizard wiped it
