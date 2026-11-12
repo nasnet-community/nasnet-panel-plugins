@@ -3,9 +3,11 @@
 # scheduler on the router. It only puts things back, so running it twice does no harm.
 #
 # It adds one script, nasnet-remote-nodes-facts, and two schedulers that run it: one at
-# boot and one every minute. The script leaves the plugin what only the router knows
-# in router/state under the plugin's data folder (container path /data/router/state),
-# as key=value lines. The plugin reads exactly these keys:
+# boot and one every minute. The script does two things. It keeps the router's side of
+# the plugin's own entry, "This router", in place while the plugin asks for it (see
+# below). And it leaves the plugin what only the router knows in router/state under the
+# plugin's data folder (container path /data/router/state), as key=value lines. The
+# plugin reads exactly these keys:
 #   domestic=1|0         a domestic link exists and is up: Domestic-WAN has an interface
 #                        that is on and running, and the table to-Domestic exists
 #   domestic_addr=       the router's own IPv4 address on that interface, like 192.168.1.20
@@ -18,6 +20,11 @@
 #                        a blackhole
 #   route_vpn=1|0        the same for to-VPN
 #   route_domestic=1|0   the same for to-Domestic
+#   local_port=          the port on the domestic link kept for the plugin's own entry;
+#                        0 while none was picked
+#   local_rules=1|0      the forward from that port to the entry is in place
+#   cloud_name=          the router's IP Cloud name; empty when it has none
+#   public_addr=         the router's address as IP Cloud sees it; empty when unknown
 #   ros=                 RouterOS version, like 7.24.5
 #   free_mem=            free memory in bytes
 #   free_disk=           free flash in bytes (free-hdd-space)
@@ -31,7 +38,21 @@
 # spells it out from compiling. So the file is rewritten in place, and a reader that
 # finds it empty, or without updated=, should look again.
 #
-# The script itself uses nothing newer than 7.11, which has no :tonsec and cannot add a folder with
+# The plugin's own entry is an Xray inbound in the container, on 192.168.50.18 port 8443.
+# The plugin says what it wants of the router in small files beside router/state:
+#   router/local     holds "on" while the entry is switched on; absent means off
+#   router/host      a name of the person's own for the entry, when one is set
+#   router/request   "new-port": pick another port once; the script removes the file
+# While router/local says on, the script keeps a dst-nat rule from a port on the
+# Domestic-WAN list to the entry, and a second one (with a mangle rule that lets it
+# through) for devices at home that dial the router's own public address. The port is
+# random, 20000 to 60000. It is read from the forward while there is one and from the
+# last report otherwise, so it stays the same through off and on, a firewall reset
+# and a wizard run. When router/local is gone the rules are removed and the port is
+# still reported. Every rule and list entry carries a comment under
+# nasnet:remote-nodes:local, and only those are ever changed or removed.
+#
+# The facts part uses nothing newer than 7.11, which has no :tonsec and cannot add a folder with
 # /file add, so the router folder is made by putting the first file into it.
 #
 # Every local is named rnf...: in a find where, a variable named like a property
@@ -103,6 +124,135 @@
             }
         }
     }
+
+    # the last report: the entry's port is in it, and the write at the end is spared when nothing changed
+    :local rnfFile ($rnfDir . "/router/state")
+    :local rnfOld ""
+    :local rnfCur [/file find where name=$rnfFile]
+    :if ([:len $rnfCur] > 0) do={ :do { :set rnfOld [/file get ($rnfCur->0) contents] } on-error={} }
+
+    # the plugin's own entry: what the plugin asks for
+    :local rnfTag "nasnet:remote-nodes:local"
+    :local rnfReachList "nasnet-remote-nodes-local"
+    :local rnfEntry "192.168.50.18"
+    :local rnfInner 8443
+    :local rnfWant false
+    :local rnfAsk [/file find where name=($rnfDir . "/router/local")]
+    :if ([:len $rnfAsk] > 0) do={
+        :do { :if ([/file get ($rnfAsk->0) contents] ~ "^on") do={ :set rnfWant true } } on-error={}
+    }
+    :local rnfRenew false
+    :local rnfReq [/file find where name=($rnfDir . "/router/request")]
+    :if ([:len $rnfReq] > 0) do={
+        :do { :if ([/file get ($rnfReq->0) contents] ~ "^new-port") do={ :set rnfRenew true } } on-error={}
+        :do { /file remove $rnfReq } on-error={}
+    }
+
+    # its port: the forward's, else the one in the last report
+    :local rnfPort 0
+    :local rnfFwd [/ip firewall nat find where comment=($rnfTag . ":forward")]
+    :if ([:len $rnfFwd] > 0) do={ :do { :set rnfPort [:tonum [/ip firewall nat get ($rnfFwd->0) dst-port]] } on-error={} }
+    :if ([:typeof $rnfPort] != "num") do={ :set rnfPort 0 }
+    :if ($rnfPort = 0) do={
+        :do {
+            :local rnfAtPort [:find $rnfOld "local_port="]
+            :if ([:typeof $rnfAtPort] = "num") do={ :set rnfPort [:tonum [:pick $rnfOld ($rnfAtPort + 11) [:find $rnfOld "\n" $rnfAtPort]]] }
+        } on-error={}
+        :if ([:typeof $rnfPort] != "num") do={ :set rnfPort 0 }
+    }
+    # a first port, or another one when asked: one that no other dst-nat rule uses
+    :if (($rnfWant = true) && (($rnfPort = 0) || ($rnfRenew = true))) do={
+        :local rnfNext 0
+        :for rnfTry from=1 to=50 do={
+            :if ($rnfNext = 0) do={
+                :local rnfCand [:rndnum from=20000 to=60000]
+                :if (($rnfCand != $rnfPort) && ([:len [/ip firewall nat find where dst-port=[:tostr $rnfCand]]] = 0)) do={ :set rnfNext $rnfCand }
+            }
+        }
+        :if ($rnfNext != 0) do={
+            :if ($rnfPort != 0) do={ :log info ("remote-nodes: the router's own entry moves from port " . $rnfPort . " to " . $rnfNext) }
+            :set rnfPort $rnfNext
+        }
+    }
+
+    # the router as the internet sees it, for the entry's links
+    :local rnfCloudName ""
+    :local rnfPublic ""
+    :do { :set rnfCloudName [:tostr [/ip cloud get dns-name]] } on-error={}
+    :do { :set rnfPublic [:tostr [/ip cloud get public-address]] } on-error={}
+
+    # what a device at home dials to reach the entry: the public address, the router's own on the
+    # domestic link, and what a name set by hand points at. Compared as text, since an address read
+    # back from the list is not a string. The list comes before the rules that name it: a rule whose
+    # list isn't there yet shows as invalid until it is.
+    :local rnfReach [:toarray ""]
+    :if ($rnfWant = true) do={
+        :if ([:len $rnfPublic] > 0) do={ :set rnfReach ($rnfReach, $rnfPublic) }
+        :if (([:len $rnfDomAddr] > 0) && ($rnfDomAddr != $rnfPublic)) do={ :set rnfReach ($rnfReach, $rnfDomAddr) }
+        :local rnfHostFile [/file find where name=($rnfDir . "/router/host")]
+        :if ([:len $rnfHostFile] > 0) do={
+            :do {
+                :local rnfHost [/file get ($rnfHostFile->0) contents]
+                :local rnfNl [:find $rnfHost "\n"]
+                :if ([:typeof $rnfNl] = "num") do={ :set rnfHost [:pick $rnfHost 0 $rnfNl] }
+                :if ([:len $rnfHost] > 0) do={
+                    :local rnfAt [:tostr [:resolve $rnfHost]]
+                    :if (($rnfAt != $rnfPublic) && ($rnfAt != $rnfDomAddr)) do={ :set rnfReach ($rnfReach, $rnfAt) }
+                }
+            } on-error={}
+        }
+    }
+    :foreach rnfE in=[/ip firewall address-list find where list=$rnfReachList && comment=($rnfTag . ":public")] do={
+        :local rnfHave [:tostr [/ip firewall address-list get $rnfE address]]
+        :local rnfKeep false
+        :foreach rnfW in=$rnfReach do={ :if ([:tostr $rnfW] = $rnfHave) do={ :set rnfKeep true } }
+        :if ($rnfKeep = false) do={ :do { /ip firewall address-list remove $rnfE } on-error={} }
+    }
+    :foreach rnfW in=$rnfReach do={
+        :local rnfThere false
+        :foreach rnfE in=[/ip firewall address-list find where list=$rnfReachList && comment=($rnfTag . ":public")] do={
+            :if ([:tostr [/ip firewall address-list get $rnfE address]] = [:tostr $rnfW]) do={ :set rnfThere true }
+        }
+        :if ($rnfThere = false) do={ :do { /ip firewall address-list add list=$rnfReachList address=$rnfW comment=($rnfTag . ":public") } on-error={} }
+    }
+
+    # its rules: there while it is switched on and the router has a domestic link set up, gone otherwise
+    :if (($rnfWant = true) && ($rnfPort != 0) && ([:len [/interface list find where name="Domestic-WAN"]] > 0)) do={
+        :do {
+            # ahead of the wizard's own dst-nat rules
+            :local rnfFirstNat [/ip firewall nat find where chain=dstnat && !(comment~("^" . $rnfTag . ":"))]
+            :foreach rnfPart in={"forward";"hairpin"} do={
+                :local rnfRule [/ip firewall nat find where comment=($rnfTag . ":" . $rnfPart)]
+                :if ([:len $rnfRule] > 0) do={
+                    :if ([:tonum [/ip firewall nat get ($rnfRule->0) dst-port]] != $rnfPort) do={ /ip firewall nat set $rnfRule dst-port=$rnfPort }
+                } else={
+                    :local rnfNew
+                    :if ($rnfPart = "forward") do={
+                        :set rnfNew [/ip firewall nat add chain=dstnat action=dst-nat protocol=tcp in-interface-list=Domestic-WAN dst-port=$rnfPort to-addresses=$rnfEntry to-ports=$rnfInner comment=($rnfTag . ":forward")]
+                    } else={
+                        :set rnfNew [/ip firewall nat add chain=dstnat action=dst-nat protocol=tcp in-interface-list=!WAN dst-address-list=$rnfReachList dst-port=$rnfPort to-addresses=$rnfEntry to-ports=$rnfInner comment=($rnfTag . ":hairpin")]
+                    }
+                    :if ([:len $rnfFirstNat] > 0) do={ /ip firewall nat move $rnfNew destination=($rnfFirstNat->0) }
+                }
+            }
+            # a device at home that dials the public address is not routed away by the wizard's rules
+            :local rnfMangle [/ip firewall mangle find where comment=($rnfTag . ":hairpin")]
+            :if ([:len $rnfMangle] > 0) do={
+                :if ([:tonum [/ip firewall mangle get ($rnfMangle->0) dst-port]] != $rnfPort) do={ /ip firewall mangle set $rnfMangle dst-port=$rnfPort }
+            } else={
+                :local rnfFirstMangle [/ip firewall mangle find where chain=prerouting && !(comment~("^" . $rnfTag . ":"))]
+                :local rnfNewMangle [/ip firewall mangle add chain=prerouting action=accept protocol=tcp in-interface-list=!WAN dst-address-list=$rnfReachList dst-port=$rnfPort comment=($rnfTag . ":hairpin")]
+                :if ([:len $rnfFirstMangle] > 0) do={ /ip firewall mangle move $rnfNewMangle destination=($rnfFirstMangle->0) }
+            }
+        } on-error={ :log warning "remote-nodes: could not set up the rules of the router's own entry" }
+    } else={
+        :if ($rnfWant = false) do={
+            :do { /ip firewall nat remove [find where comment~("^" . $rnfTag . ":")] } on-error={}
+            :do { /ip firewall mangle remove [find where comment~("^" . $rnfTag . ":")] } on-error={}
+        }
+    }
+    :local rnfRules 0
+    :if ([:len [/ip firewall nat find where comment=($rnfTag . ":forward")]] > 0) do={ :set rnfRules 1 }
 
     # a VPN: VPN-WAN has an interface that is on and running; kind and label are the first
     # one that is up, or else the first one listed
@@ -182,14 +332,10 @@
     :if ([:typeof $rnfNow] != "num") do={ :set rnfNow 0 }
 
     # the facts, then what changes all the time
-    :local rnfState ("domestic=" . $rnfDomestic . "\ndomestic_addr=" . $rnfDomAddr . "\nvpn=" . $rnfVpn . "\nvpn_kind=" . $rnfVpnKind . "\nvpn_label=" . $rnfVpnLabel . "\n" . $rnfRoutes . "ros=" . $rnfRos . "\n")
+    :local rnfState ("domestic=" . $rnfDomestic . "\ndomestic_addr=" . $rnfDomAddr . "\nvpn=" . $rnfVpn . "\nvpn_kind=" . $rnfVpnKind . "\nvpn_label=" . $rnfVpnLabel . "\n" . $rnfRoutes . "local_port=" . $rnfPort . "\nlocal_rules=" . $rnfRules . "\ncloud_name=" . $rnfCloudName . "\npublic_addr=" . $rnfPublic . "\nros=" . $rnfRos . "\n")
     :local rnfText ($rnfState . "free_mem=" . $rnfMem . "\nfree_disk=" . $rnfDisk . "\nupdated=" . $rnfNow . "\n")
 
     # leave the file alone when the facts are the same and it was written under 10 minutes ago
-    :local rnfFile ($rnfDir . "/router/state")
-    :local rnfOld ""
-    :local rnfCur [/file find where name=$rnfFile]
-    :if ([:len $rnfCur] > 0) do={ :do { :set rnfOld [/file get ($rnfCur->0) contents] } on-error={} }
     :local rnfSame false
     :do {
         :local rnfAtMem [:find $rnfOld "free_mem="]
