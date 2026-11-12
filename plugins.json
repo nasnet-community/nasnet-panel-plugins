@@ -47,12 +47,12 @@
     },
     {
       "id": "remote-nodes",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "visible": false,
       "name": "Remote Nodes",
       "author": "NASNET Community",
       "category": "proxy",
-      "tagline": "Manage your domestic nodes from this router.",
+      "tagline": "An Xray entry on this router and on your domestic nodes.",
       "url": "https://github.com/nasnet-community/nasnet-panel-linux",
       "canInstall": false
     }
