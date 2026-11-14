@@ -1,7 +1,7 @@
 {
   "id": "remote-nodes",
   "name": "V2ray/Xray",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "visible": false,
   "author": "NASNET Community",
   "license": "AGPL-3.0",
@@ -13,7 +13,7 @@
   "architectures": ["arm64", "amd64"],
   "minRouterOS": "7.20",
   "container": {
-    "image": "ghcr.io/nasnet-community/remote-nodes:0.2.1",
+    "image": "ghcr.io/nasnet-community/remote-nodes:0.2.2",
     "interface": {
       "name": "veth-remote-nodes",
       "address": ["192.168.50.16/24", "192.168.50.17/24", "192.168.50.18/24"],
