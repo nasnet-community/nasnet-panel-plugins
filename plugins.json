@@ -37,13 +37,13 @@
     {
       "id": "remote-nodes",
       "version": "0.2.2",
-      "visible": false,
+      "visible": true,
       "name": "V2ray/Xray",
       "author": "NASNET Community",
       "category": "proxy",
       "tagline": "An Xray entry on this router and on your domestic nodes.",
       "url": "https://github.com/nasnet-community/nasnet-panel-linux",
-      "canInstall": false
+      "canInstall": true
     }
   ]
 }
