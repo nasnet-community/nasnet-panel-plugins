@@ -2,7 +2,7 @@
   "id": "remote-nodes",
   "name": "V2ray/Xray",
   "version": "0.2.2",
-  "visible": true,
+  "visible": false,
   "author": "NASNET Community",
   "license": "AGPL-3.0",
   "website": "https://github.com/nasnet-community/nasnet-panel-linux",
