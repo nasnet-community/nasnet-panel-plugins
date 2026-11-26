@@ -63,7 +63,6 @@ Each plugin has reserved addresses:
 
 | Plugin            | veth          | Management | Exit classes |
 | ----------------- | ------------- | ---------- | ------------ |
-| telegram-mtproto  | veth-mtproto  | 192.168.50.11 | 192.168.150.11 (Domestic failover), 192.168.150.91 (Foreign failover) |
 | telegram-mtproto-local | veth-mtproto-local | 192.168.50.13, 192.168.50.14 | |
 | nasnet-monitor    | veth-monitor  | 192.168.50.15 | |
 | remote-nodes      | veth-remote-nodes | 192.168.50.16 | 192.168.150.1 (Domestic failover), 192.168.150.80 (Foreign failover), 192.168.150.160 (VPN failover) |
@@ -95,7 +94,7 @@ New plugins take the next free address and register it here.
 `container`:
 
 - `image` — OCI image reference used as `remote-image`
-- `interface` — `{ name, address, gateway }` for the plugin's veth. `address` carries its prefix length (`192.168.50.11/24`). It can also be a list, `["192.168.50.16/24", "192.168.150.1/24"]`, or a comma-separated string, for a plugin that needs several source addresses; the first is the container's own. An address in `192.168.150.0/24` is a `/24` inside an exit class, and a plugin that has one uses `192.168.150.254` as its gateway. An update gives the veth the new manifest's addresses and gateway
+- `interface` — `{ name, address, gateway }` for the plugin's veth. `address` carries its prefix length (`192.168.50.15/24`). It can also be a list, `["192.168.50.16/24", "192.168.150.1/24"]`, or a comma-separated string, for a plugin that needs several source addresses; the first is the container's own. An address in `192.168.150.0/24` is a `/24` inside an exit class, and a plugin that has one uses `192.168.150.254` as its gateway. An update gives the veth the new manifest's addresses and gateway
 - `env` — key/value map, values may use `{{settings.*}}` placeholders
 - `mounts` — `[{ name, src, dst }]`; `src` is relative to the router's NASNET data root (e.g. `usb1/nasnet/`)
 - `ports` — `[{ protocol, containerPort, hostPort, description }]`; `hostPort` may be a placeholder. `description` is a short label for what the port serves (e.g. `Web dashboard`), used only for display in the panel dashboard; nothing on the router reads it. Ports are informational in general, and actual exposure is done by `post-install.rsc`.
