@@ -20,13 +20,13 @@ Users, their secrets, limits and usage live in the plugin's data folder on the r
 
 ## Networking
 
-- Container: `192.168.50.11` on the shared `containers` bridge, dashboard on internal port 8080.
+- Container: `192.168.50.11` on the shared `containers` bridge for its dashboard (internal port 8080), and two addresses in the containers' exit classes, with `192.168.150.254` as its gateway.
 - The container only dials out. Nothing is published on the WAN.
-- It relies on two routing rules for `192.168.50.11`, which the panel's setup wizard adds: destinations in `DOMAddList` (the VPSes) go through the domestic route, everything else that is not a local address (Telegram, binary downloads) goes through the foreign route. `pre-install.rsc` adds them if a wizard re-run or an older setup lost them (commented `nasnet:telegram-mtproto:*`); `pre-uninstall.rsc` removes only those.
+- The router sends it out by source address: the VPSes (the agents' links and SSH) from `192.168.150.11`, through the domestic link (Domestic failover class), and Telegram and binary downloads from `192.168.150.91`, through the foreign link (Foreign failover class). The panel sets the classes up; `ADDR_DOMESTIC` and `ADDR_FOREIGN` tell the plugin which address is which. Older versions relied on two mangle rules for `192.168.50.11`; `pre-install.rsc` and `pre-uninstall.rsc` remove those (commented `nasnet:telegram-mtproto:*`).
 - Data persists in `nasnet-panel/container-volumes/telegram-mtproto/telegram-mtproto/data` on the panel's storage.
 
 ## Troubleshooting
 
-- **The install stops at the link step.** The VPS address is probably not in `DOMAddList`, so the router reaches it over the wrong route. Add it, then repair the server. Also check that the link port (8443 by default) is open at the VPS provider.
+- **The install stops at the link step.** The router reaches the VPSes through its domestic link, so check that it has one and that it is up. Also check that the link port (8443 by default) is open at the VPS provider.
 - **The cover site check fails.** The site must answer TLS 1.3 with HTTP/2 and a valid certificate, as seen from the VPS. Pick another domain.
 - **Small routers.** On 32-bit ARM routers the plugin manages one server; on others, up to three.
