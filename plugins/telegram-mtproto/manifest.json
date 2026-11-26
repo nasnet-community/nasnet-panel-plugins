@@ -1,7 +1,7 @@
 {
   "id": "telegram-mtproto",
   "name": "Remote MTProto",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "visible": false,
   "author": "NASNET Community",
   "license": "MIT",
@@ -15,11 +15,13 @@
     "image": "ghcr.io/nasnet-community/mtproto-remote-plugin:main",
     "interface": {
       "name": "veth-mtproto",
-      "address": "192.168.50.11/24",
-      "gateway": "192.168.50.1"
+      "address": "192.168.50.11/24,192.168.150.11/24,192.168.150.91/24",
+      "gateway": "192.168.150.254"
     },
     "env": {
-      "BASE_PATH": "/api/plugin/view/telegram-mtproto"
+      "BASE_PATH": "/api/plugin/view/telegram-mtproto",
+      "ADDR_DOMESTIC": "192.168.150.11",
+      "ADDR_FOREIGN": "192.168.150.91"
     },
     "mounts": [
       {
