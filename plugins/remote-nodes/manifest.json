@@ -16,11 +16,14 @@
     "image": "ghcr.io/nasnet-community/remote-nodes:0.2.2",
     "interface": {
       "name": "veth-remote-nodes",
-      "address": ["192.168.50.16/24", "192.168.50.17/24", "192.168.50.18/24"],
-      "gateway": "192.168.50.1"
+      "address": ["192.168.50.16/24", "192.168.150.1/24", "192.168.150.80/24", "192.168.150.160/24"],
+      "gateway": "192.168.150.254"
     },
     "env": {
-      "BASE_PATH": "/api/plugin/view/remote-nodes"
+      "BASE_PATH": "/api/plugin/view/remote-nodes",
+      "ADDR_FOREIGN": "192.168.150.80",
+      "ADDR_EXIT": "192.168.150.160",
+      "ADDR_NODES": "192.168.150.1"
     },
     "mounts": [
       {
@@ -40,20 +43,6 @@
     "memoryHigh": "96M",
     "memoryMax": "128M"
   },
-  "routing": [
-    {
-      "address": "192.168.50.16",
-      "via": "foreign"
-    },
-    {
-      "address": "192.168.50.17",
-      "via": "vpn"
-    },
-    {
-      "address": "192.168.50.18",
-      "via": "domestic"
-    }
-  ],
   "scripts": {
     "preInstall": "scripts/pre-install.rsc",
     "postInstall": "scripts/post-install.rsc",

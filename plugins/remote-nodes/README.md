@@ -31,12 +31,12 @@ Open the dashboard from the panel, which proxies it.
 
 ## Networking
 
-- Container: `192.168.50.16`, `.17` and `.18` on the shared `containers` bridge; dashboard on internal port 8080, which is not forwarded anywhere.
-- The router sends each address out its own way, by source address. The manifest's `routing` list names them, and the panel turns it into rules, rebuilds them when the wizard runs again and removes them on uninstall:
-  - `.16`, `foreign`: release downloads (the node software and Xray builds come from GitHub), out the foreign link;
-  - `.17`, `vpn`: what clients send through a node, out the VPN;
-  - `.18`, `domestic`: SSH and gRPC to the nodes, and the tunnels to them, out the domestic link. This router's entry listens here too, on port 8443, and its replies leave the same way.
-- A link that is missing fails closed: traffic from its address is dropped, not sent out another way.
+- Container: `192.168.50.16` on the shared `containers` bridge for its dashboard (internal port 8080, which is not forwarded anywhere), and three addresses in the containers' exit classes, with `192.168.150.254` as its gateway.
+- The router sends each exit class address out its own way, by source address. The panel sets the classes up, and the manifest's `ADDR_*` variables tell the plugin which address is which:
+  - `192.168.150.80` (Foreign failover class): release downloads (the node software and Xray builds come from GitHub) and the outbounds, out the foreign link;
+  - `192.168.150.160` (VPN failover class): what clients send through a node, out the VPN;
+  - `192.168.150.1` (Domestic failover class): SSH and gRPC to the nodes, and the tunnels to them, out the domestic link. This router's entry listens here too, on port 8443, and its replies leave the same way.
+- A link that is missing fails closed: the router drops what the class's addresses send, instead of sending it out another way.
 - This router's port is not in the manifest: the router script opens it only while This router is switched on (see below).
 
 ## Router script
@@ -62,17 +62,17 @@ Open the dashboard from the panel, which proxies it.
 The plugin leaves the script what it wants in small files next to `router/state`: `router/local` holds `on` while This router is switched on, `router/host` holds a name of your own when one is set, and `router/request` holds `new-port` once when you ask for another port. While `router/local` says `on`, the script keeps:
 
 - a random port between 20000 and 60000, the same one through off and on, a firewall reset and a wizard run, until you ask for a new one;
-- a `dst-nat` rule from that port on the `Domestic-WAN` list to `192.168.50.18:8443`;
+- a `dst-nat` rule from that port on the `Domestic-WAN` list to `192.168.150.1:8443`;
 - a second `dst-nat` rule and a `mangle` rule for devices at home, so the same link works on your own Wi-Fi: they match the addresses in the list `nasnet-remote-nodes-local` (the router's public address, its address on the domestic link, and what your own name points at).
 
 Every rule and list entry has a comment starting with `nasnet:remote-nodes:local:`. Switching This router off removes the rules within a minute and keeps the port number.
 
-The file is rewritten when a fact changes and at least every 10 minutes, to spare the flash. The wizard removes every script and scheduler when it runs again, so the panel runs `pre-install.rsc` once more afterwards (`scripts.postWizard`) to put them back. `post-install.rsc` runs the script again once the container is up, and makes sure both schedulers exist.
+The file is rewritten when a fact changes and at least every 10 minutes, to spare the flash. The wizard removes every script and scheduler when it runs again, so the panel runs `pre-install.rsc` once more afterwards (`scripts.postWizard`) to put them back. An update runs it once too, so the router side follows the new version. `post-install.rsc` runs the script again once the container is up, and makes sure both schedulers exist.
 
 ## Install and uninstall
 
-- Install: the panel creates the veth with its three addresses and the data mount, runs `pre-install.rsc`, creates and starts the container, then runs `post-install.rsc`. Nothing is exposed on the router until This router is switched on.
-- Uninstall: `pre-uninstall.rsc` removes the script, its schedulers and the rules of This router, and the panel removes the container and the routing rules. The data stays unless you also choose to delete it in the uninstall dialog; installing again picks the folder up, with its nodes and subscriptions.
+- Install: the panel creates the veth with its four addresses, puts the exit classes on the router if they aren't there, creates the data mount, runs `pre-install.rsc`, creates and starts the container, then runs `post-install.rsc`. Nothing is exposed on the router until This router is switched on.
+- Uninstall: `pre-uninstall.rsc` removes the script, its schedulers and the rules of This router, and the panel removes the container; the exit classes stay, since every container uses them. The data stays unless you also choose to delete it in the uninstall dialog; installing again picks the folder up, with its nodes and subscriptions.
 - The data is in `nasnet-panel/container-volumes/remote-nodes/remote-nodes/data` on the panel's storage. It holds the certificate authority every node trusts. Without it each node has to be set up again, so keep an exported backup from the dashboard's Settings.
 
 ## Troubleshooting

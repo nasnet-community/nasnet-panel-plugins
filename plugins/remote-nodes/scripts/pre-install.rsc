@@ -38,7 +38,7 @@
 # spells it out from compiling. So the file is rewritten in place, and a reader that
 # finds it empty, or without updated=, should look again.
 #
-# The plugin's own entry is an Xray inbound in the container, on 192.168.50.18 port 8443.
+# The plugin's own entry is an Xray inbound in the container, on 192.168.150.1 port 8443.
 # The plugin says what it wants of the router in small files beside router/state:
 #   router/local     holds "on" while the entry is switched on; absent means off
 #   router/host      a name of the person's own for the entry, when one is set
@@ -134,7 +134,7 @@
     # the plugin's own entry: what the plugin asks for
     :local rnfTag "nasnet:remote-nodes:local"
     :local rnfReachList "nasnet-remote-nodes-local"
-    :local rnfEntry "192.168.50.18"
+    :local rnfEntry "192.168.150.1"
     :local rnfInner 8443
     :local rnfWant false
     :local rnfAsk [/file find where name=($rnfDir . "/router/local")]
@@ -225,6 +225,8 @@
                 :local rnfRule [/ip firewall nat find where comment=($rnfTag . ":" . $rnfPart)]
                 :if ([:len $rnfRule] > 0) do={
                     :if ([:tonum [/ip firewall nat get ($rnfRule->0) dst-port]] != $rnfPort) do={ /ip firewall nat set $rnfRule dst-port=$rnfPort }
+                    # a rule from before the entry moved to its exit class address
+                    :if ([:tostr [/ip firewall nat get ($rnfRule->0) to-addresses]] != $rnfEntry) do={ /ip firewall nat set $rnfRule to-addresses=$rnfEntry }
                 } else={
                     :local rnfNew
                     :if ($rnfPart = "forward") do={
