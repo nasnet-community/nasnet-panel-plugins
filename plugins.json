@@ -24,17 +24,6 @@
       "canInstall": true
     },
     {
-      "id": "telegram-mtproto",
-      "version": "1.2.0",
-      "visible": false,
-      "name": "Remote MTProto",
-      "author": "NASNET Community",
-      "category": "proxy",
-      "tagline": "Run MTProto proxy servers on your VPSes.",
-      "url": "https://github.com/nasnet-community/mtproto-remote-plugin",
-      "canInstall": false
-    },
-    {
       "id": "remote-nodes",
       "version": "0.2.2",
       "visible": false,

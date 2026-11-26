@@ -12,7 +12,7 @@ Plugin registry for the NASNET Panel. Each plugin's manifest and settings are ad
 
 | Plugin | Category | Description |
 | --- | --- | --- |
-| [Telegram MTProto](plugins/telegram-mtproto) | proxy | Self-hosted MTProto proxy for Telegram |
+| [Local MTProto](plugins/telegram-mtproto-local) | proxy | Run a Telegram proxy on this router |
 | [NASNET Monitor](plugins/nasnet-monitor) | monitoring | Router and network health monitoring |
 
 ## Contributing
