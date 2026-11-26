@@ -31,6 +31,7 @@ The dashboard asks for a cover site, which the router checks over the domestic l
   - routing: replies and the cover site (fetched from `.14`) go out the domestic link, everything else from `.13`, that is Telegram, out the foreign link (mangle `replies`, `cover`, `foreign`).
 - "New port" in the dashboard asks the script for another random port; it moves the forward within a minute. The port is also kept in `router/state` in the data folder, so a firewall reset brings the same port back.
 - `pre-uninstall.rsc` removes the script, its schedule, and all of the above.
+- The container is created with a 256 MB memory limit and always restarts 10 seconds after it exits.
 - Data persists in `nasnet-panel/container-volumes/telegram-mtproto-local/telegram-mtproto-local/data` on the panel's storage. Uninstalling deletes it, users included.
 
 ## Troubleshooting

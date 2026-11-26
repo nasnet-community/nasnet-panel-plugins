@@ -14,7 +14,7 @@
     },
     {
       "id": "telegram-mtproto-local",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "visible": true,
       "name": "Local MTProto",
       "author": "NASNET Community",

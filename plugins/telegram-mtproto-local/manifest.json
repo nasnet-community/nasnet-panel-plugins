@@ -1,7 +1,7 @@
 {
   "id": "telegram-mtproto-local",
   "name": "Local MTProto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "visible": true,
   "author": "NASNET Community",
   "license": "MIT",
@@ -41,7 +41,9 @@
         "hostPort": "random",
         "description": "Telegram proxy, forwarded from a random port on the domestic link"
       }
-    ]
+    ],
+    "memoryMax": "256M",
+    "autoRestartInterval": "10s"
   },
   "scripts": {
     "preInstall": "scripts/pre-install.rsc",
