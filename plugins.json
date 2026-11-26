@@ -25,7 +25,7 @@
     },
     {
       "id": "remote-nodes",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "visible": false,
       "name": "V2ray/Xray",
       "author": "NASNET Community",

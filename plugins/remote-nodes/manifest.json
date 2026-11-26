@@ -1,7 +1,7 @@
 {
   "id": "remote-nodes",
   "name": "V2ray/Xray",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "visible": false,
   "author": "NASNET Community",
   "license": "AGPL-3.0",
@@ -40,8 +40,9 @@
         "description": "Web dashboard"
       }
     ],
-    "memoryHigh": "96M",
-    "memoryMax": "128M"
+    "memoryHigh": "192M",
+    "memoryMax": "256M",
+    "autoRestartInterval": "10s"
   },
   "scripts": {
     "preInstall": "scripts/pre-install.rsc",
